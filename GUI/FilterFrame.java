@@ -7,7 +7,7 @@ package GUI;
 
 import static GUI.GUI.brendNameList;
 import static GUI.GUI.categoryNameList;
-import static GUI.GUI.databaseTable;
+import static GUI.GUI.productTableModel;
 import database.Database;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -21,7 +21,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import static GUI.GUI.productTableModel;
+import static GUI.GUI.table;
 import javax.swing.RowSorter;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -38,7 +38,7 @@ public class FilterFrame extends JFrame{
     private ButtonGroup bg;
     private JComboBox category, brend;
     private ActionListener b,c;
-    public FilterFrame(){
+    public FilterFrame() throws SQLException  {
         super("Filter");
         
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -59,10 +59,7 @@ public class FilterFrame extends JFrame{
         main.add(categoryFlag);
         main.add(brendFlag);
         
-        try {
-            GUI.getLists();
-        } catch (SQLException ex) {}
-        
+        GUI.getLists();
         category= new JComboBox(categoryNameList);
         category.setEnabled(false);
         brend = new JComboBox(brendNameList);
@@ -79,11 +76,12 @@ public class FilterFrame extends JFrame{
                 try {
                     productTableModel = new ProductTableModel(Database.filterByCategory(GUI.categoryIDList[category.getSelectedIndex()]));
                 } catch (SQLException ex) {}
-                databaseTable.setModel(productTableModel);
+                table.setModel(productTableModel);
                 productTableModel.fireTableDataChanged();
                 RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(productTableModel);
-                databaseTable.setRowSorter(sorter);
-                GUI.filterButton.setText("Calcel filter");
+                table.setRowSorter(sorter);
+                table.getColumnModel().removeColumn(table.getColumnModel().getColumn(5));
+                GUI.filterButton.setText("Cancel filter");
                 dispose();
           }
         };
@@ -93,11 +91,12 @@ public class FilterFrame extends JFrame{
                 try {
                     productTableModel = new ProductTableModel(Database.filterByBrend(GUI.brendIDList[brend.getSelectedIndex()]));
                 } catch (SQLException ex) {}
-                databaseTable.setModel(productTableModel);
+                table.setModel(productTableModel);
                 productTableModel.fireTableDataChanged();
                 RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(productTableModel);
-                databaseTable.setRowSorter(sorter);
-                GUI.filterButton.setText("Calcel filter");
+                table.setRowSorter(sorter);
+                table.getColumnModel().removeColumn(table.getColumnModel().getColumn(5));
+                GUI.filterButton.setText("Cancel filter");
                 dispose();
           }
         };
@@ -130,6 +129,7 @@ public class FilterFrame extends JFrame{
         setLocationRelativeTo(null);
         setVisible(true);
     }
+    
     
     
 }

@@ -5,16 +5,24 @@
  */
 package GUI;
 
+import database.BasketLine;
 import database.Product;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import javax.swing.JButton;
 import javax.swing.table.AbstractTableModel;
 
-public class ProductTableModel extends AbstractTableModel{  
+public class BasketTableModel extends AbstractTableModel{  
 //data
-    private ArrayList<Product> list;
+    private ArrayList<BasketLine> list;
 //constructor
-    public ProductTableModel(ArrayList<Product> list){
+    public BasketTableModel(ArrayList<BasketLine> list){
         this.list = list;
+    }
+
+    public ArrayList<BasketLine> getList() {
+        return list;
     }
 //insert values in table
 //set row amount
@@ -25,7 +33,7 @@ public class ProductTableModel extends AbstractTableModel{
 //set column amount
     @Override
     public int getColumnCount() {
-       return 6;
+       return 4;
     }
 //set header
     @Override
@@ -39,15 +47,9 @@ public class ProductTableModel extends AbstractTableModel{
                 s = "Price";
                 break;
             case 2:
-                s = "In stock";
+                s = "Amount";
                 break;
-            case 3:
-                s = "Category";
-                break;
-            case 4:
-                s = "Brend";
-                break;
-            case 5: 
+            case 3: 
                 s = "ID";
                 break;
             default:
@@ -64,18 +66,12 @@ public class ProductTableModel extends AbstractTableModel{
             a = list.get(rowIndex).getName();
             break;
             case 1:
-            a = list.get(rowIndex).getPrice() + " ₽ for " + list.get(rowIndex).getMeasurement();
+            a = String.format("%.2f", list.get(rowIndex).getPrice())+"₽";
             break;
             case 2:
-            a = list.get(rowIndex).getAmount()>0? " In stock: " + list.get(rowIndex).getAmount() : "Out of stock";
+            a = list.get(rowIndex).getAmount();
             break;
             case 3:
-            a = list.get(rowIndex).getCat();
-            break;
-            case 4:
-            a = list.get(rowIndex).getBr();
-            break;
-            case 5:
             a = list.get(rowIndex).getId();
             break;
             default:
